@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girish - Stock Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #0a0a0a;
+    --bg2: #1a1a1a;
+    --card: #151515;
+    --border: #FFD700;
+    --yellow: #FFD700;
+    --orange: #FFA500;
+    --text: #fff;
+    --text-dim: #aaa;
+    --success: #00ff88;
+    --danger: #ff3366;
+}
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+.header {
+    background: var(--bg2);
+    border-bottom: 2px solid var(--yellow);
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand img {
+    width: 40px;
+    height: 40px;
+}
+
+.brand-text h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: var(--yellow);
+}
+
+.brand-text p {
+    font-size: 0.85rem;
+    color: var(--orange);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid var(--yellow);
+    object-fit: cover;
+}
+
+.user-info h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--yellow);
+}
+
+.user-info p {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}
+
+.back-btn {
+    background: transparent;
+    border: 2px solid var(--yellow);
+    color: var(--yellow);
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.back-btn:hover {
+    background: var(--yellow);
+    color: #000;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--card);
+    border: 2px solid var(--yellow);
+    border-radius: 15px;
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+    transition: 0.5s;
+}
+
+.stat-card:hover::before {
+    left: 100%;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--yellow);
+    margin-bottom: 15px;
+}
+
+.stat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+}
+
+.section {
+    background: var(--card);
+    border: 2px solid var(--yellow);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: var(--yellow);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.export-btn {
+    background: var(--yellow);
+    border: none;
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.export-btn:hover {
+    background: var(--orange);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+}
+
+.search-box {
+    padding: 10px 15px;
+    background: var(--bg2);
+    border: 2px solid var(--yellow);
+    color: var(--text);
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    width: 300px;
+}
+
+.search-box:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background: var(--bg2);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.product-card:hover {
+    border-color: var(--yellow);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+}
+
+.product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    background: var(--card);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.product-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: var(--yellow);
+}
+
+.product-category {
+    font-size: 0.85rem;
+    color: var(--orange);
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    color: var(--success);
+    margin-bottom: 15px;
+}
+
+.product-stock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: var(--card);
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.stock-label {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+}
+
+.stock-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.stock-low {
+    color: var(--danger);
+}
+
+.stock-ok {
+    color: var(--success);
+}
+
+.sale-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.qty-input {
+    padding: 8px;
+    background: var(--card);
+    border: 2px solid var(--yellow);
+    color: var(--text);
+    border-radius: 6px;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+}
+
+.qty-input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.sell-btn {
+    background: var(--success);
+    border: none;
+    color: #000;
+    padding: 8px;
+    border-radius: 6px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.sell-btn:hover {
+    background: #00cc66;
+    transform: scale(1.05);
+}
+
+.sales-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.sales-table th {
+    text-align: left;
+    padding: 12px;
+    color: var(--yellow);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.sales-table tr {
+    background: var(--bg2);
+    transition: all 0.3s;
+}
+
+.sales-table tr:hover {
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.sales-table td {
+    padding: 15px 12px;
+}
+
+.sales-table tr td:first-child {
+    border-radius: 10px 0 0 10px;
+}
+
+.sales-table tr td:last-child {
+    border-radius: 0 10px 10px 0;
+}
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--card);
+    border: 2px solid var(--yellow);
+    border-radius: 10px;
+    padding: 15px 25px;
+    color: var(--text);
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.3s ease;
+    z-index: 1000;
+}
+
+.toast.show {
+    display: flex;
+}
+
+.toast.success {
+    border-color: var(--success);
+}
+
+.toast.error {
+    border-color: var(--danger);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .search-box {
+        width: 100%;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sales-table {
+        font-size: 0.85rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="brand">
+        <img src="https://raw.githubusercontent.com/pprojectcentreee/Ellectra/main/Ellectra_w01wap%20(2).png" alt="Logo">
+        <div class="brand-text">
+            <h1>ELLECTRA</h1>
+            <p>Stock Management System</p>
+        </div>
+    </div>
+    
+    <div class="user-profile">
+        <img src="https://raw.githubusercontent.com/pprojectcentreee/Stocksofellectra/main/gk.jpg" alt="Girish" class="user-avatar">
+        <div class="user-info">
+            <h3>GIRISH</h3>
+            <p>Sales Executive</p>
+        </div>
+    </div>
+    
+    <button class="back-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i> BACK
+    </button>
+</div>
+
+<div class="container">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-box"></i></div>
+            <div class="stat-value" id="total-products">0</div>
+            <div class="stat-label">Total Products</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
+            <div class="stat-value" id="total-sales">0</div>
+            <div class="stat-label">Total Sales</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+            <div class="stat-value" id="total-revenue">₹0</div>
+            <div class="stat-label">Total Revenue</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+            <div class="stat-value" id="today-sales">0</div>
+            <div class="stat-label">Today's Sales</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="fas fa-warehouse"></i>
+                MY INVENTORY
+            </h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <input type="text" class="search-box" id="search-input" placeholder="Search products...">
+                <button class="export-btn" onclick="exportToCSV('girish')">
+                    <i class="fas fa-file-csv"></i>
+                    EXPORT CSV
+                </button>
+            </div>
+        </div>
+        
+        <div class="product-grid" id="product-grid">
+            <!-- Products will be loaded here -->
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="fas fa-history"></i>
+                SALES HISTORY
+            </h2>
+            <button class="export-btn" onclick="exportSalesToCSV('girish')">
+                <i class="fas fa-download"></i>
+                EXPORT SALES
+            </button>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="sales-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-tbody">
+                    <!-- Sales will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message"></span>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyAJm0fEDPItyL6nBMWzWGQnSAjreDlCOpQ",
+    authDomain: "ellectra-2b95d.firebaseapp.com",
+    projectId: "ellectra-2b95d",
+    storageBucket: "ellectra-2b95d.firebasestorage.app",
+    messagingSenderId: "164410965069",
+    appId: "1:164410965069:web:b86f8fd714f84c27e3f004"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const USER = 'girish';
+let allProducts = [];
+let salesHistory = [];
+
+// Load components from admin
+db.collection('components').onSnapshot(snapshot => {
+    allProducts = [];
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        allProducts.push({
+            id: doc.id,
+            ...data,
+            girishStock: 0,
+            girishSold: 0
+        });
+    });
+    
+    // Load user-specific stock data
+    loadUserStock();
+});
+
+function loadUserStock() {
+    db.collection('userStocks').doc(USER).get().then(doc => {
+        if (doc.exists) {
+            const stockData = doc.data();
+            allProducts = allProducts.map(p => ({
+                ...p,
+                girishStock: stockData[p.id]?.stock || 0,
+                girishSold: stockData[p.id]?.sold || 0
+            }));
+        }
+        renderProducts();
+        updateStats();
+    });
+}
+
+// Load sales history
+db.collection('sales').where('seller', '==', USER).orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+    salesHistory = [];
+    snapshot.forEach(doc => {
+        salesHistory.push({ id: doc.id, ...doc.data() });
+    });
+    renderSalesHistory();
+    updateStats();
+});
+
+function renderProducts() {
+    const grid = document.getElementById('product-grid');
+    const search = document.getElementById('search-input').value.toLowerCase();
+    
+    const filtered = allProducts.filter(p => 
+        p.name.toLowerCase().includes(search) || 
+        (p.category && p.category.toLowerCase().includes(search))
+    );
+    
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-dim); padding: 40px;">No products found</p>';
+        return;
+    }
+    
+    grid.innerHTML = filtered.map(p => `
+        <div class="product-card">
+            <img src="${p.image || 'https://via.placeholder.com/200/1a1a1a/FFD700?text=No+Image'}" 
+                 class="product-img" 
+                 onerror="this.src='https://via.placeholder.com/200/1a1a1a/FFD700?text=No+Image'">
+            <div class="product-name">${p.name}</div>
+            <div class="product-category">${p.category || 'Uncategorized'}</div>
+            <div class="product-price">₹${parseFloat(p.price).toFixed(2)}</div>
+            
+            <div class="product-stock">
+                <span class="stock-label">Available Stock:</span>
+                <span class="stock-value ${p.girishStock < 5 ? 'stock-low' : 'stock-ok'}">
+                    ${p.girishStock}
+                </span>
+            </div>
+            
+            <div class="product-stock">
+                <span class="stock-label">Sold:</span>
+                <span class="stock-value" style="color: var(--yellow)">${p.girishSold}</span>
+            </div>
+            
+            <div class="sale-controls">
+                <input type="number" class="qty-input" id="qty-${p.id}" min="1" max="${p.girishStock}" value="1" placeholder="Qty">
+                <button class="sell-btn" onclick="sellProduct('${p.id}')" ${p.girishStock === 0 ? 'disabled' : ''}>
+                    <i class="fas fa-shopping-cart"></i> SELL
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function sellProduct(productId) {
+    const product = allProducts.find(p => p.id === productId);
+    if (!product) return;
+    
+    const qtyInput = document.getElementById('qty-' + productId);
+    const qty = parseInt(qtyInput.value) || 0;
+    
+    if (qty <= 0) {
+        showToast('Enter valid quantity', 'error');
+        return;
+    }
+    
+    if (qty > product.girishStock) {
+        showToast('Not enough stock!', 'error');
+        return;
+    }
+    
+    const totalPrice = qty * product.price;
+    
+    // Record sale
+    db.collection('sales').add({
+        seller: USER,
+        productId: product.id,
+        productName: product.name,
+        quantity: qty,
+        price: product.price,
+        totalAmount: totalPrice,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    // Update stock
+    const newStock = product.girishStock - qty;
+    const newSold = product.girishSold + qty;
+    
+    db.collection('userStocks').doc(USER).set({
+        [productId]: {
+            stock: newStock,
+            sold: newSold
+        }
+    }, { merge: true });
+    
+    showToast(`Sold ${qty} x ${product.name} for ₹${totalPrice.toFixed(2)}`, 'success');
+    qtyInput.value = 1;
+}
+
+function renderSalesHistory() {
+    const tbody = document.getElementById('sales-tbody');
+    
+    if (salesHistory.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-dim);">No sales yet</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = salesHistory.map(s => {
+        const date = s.timestamp ? s.timestamp.toDate().toLocaleString('en-IN') : 'N/A';
+        return `
+            <tr>
+                <td>${date}</td>
+                <td>${s.productName}</td>
+                <td>${s.quantity}</td>
+                <td>₹${parseFloat(s.price).toFixed(2)}</td>
+                <td style="color: var(--success); font-weight: 700;">₹${parseFloat(s.totalAmount).toFixed(2)}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function updateStats() {
+    const totalProducts = allProducts.filter(p => p.girishStock > 0).length;
+    const totalSales = salesHistory.length;
+    const totalRevenue = salesHistory.reduce((sum, s) => sum + (s.totalAmount || 0), 0);
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todaySales = salesHistory.filter(s => {
+        if (!s.timestamp) return false;
+        const saleDate = s.timestamp.toDate();
+        saleDate.setHours(0, 0, 0, 0);
+        return saleDate.getTime() === today.getTime();
+    }).length;
+    
+    document.getElementById('total-products').textContent = totalProducts;
+    document.getElementById('total-sales').textContent = totalSales;
+    document.getElementById('total-revenue').textContent = '₹' + totalRevenue.toFixed(0);
+    document.getElementById('today-sales').textContent = todaySales;
+}
+
+function exportToCSV(user) {
+    let csv = '\uFEFFProduct,Category,Price,Available Stock,Total Sold\n';
+    
+    allProducts.forEach(p => {
+        csv += `"${p.name}","${p.category || ''}",₹${p.price},${p.girishStock},${p.girishSold}\n`;
+    });
+    
+    downloadCSV(csv, `${user}_inventory_${new Date().toISOString().slice(0, 10)}.csv`);
+}
+
+function exportSalesToCSV(user) {
+    let csv = '\uFEFFDate,Product,Quantity,Price,Total Amount\n';
+    
+    salesHistory.forEach(s => {
+        const date = s.timestamp ? s.timestamp.toDate().toLocaleString('en-IN') : 'N/A';
+        csv += `"${date}","${s.productName}",${s.quantity},₹${s.price},₹${s.totalAmount}\n`;
+    });
+    
+    downloadCSV(csv, `${user}_sales_${new Date().toISOString().slice(0, 10)}.csv`);
+}
+
+function downloadCSV(csv, filename) {
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('CSV exported successfully!', 'success');
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const msg = document.getElementById('toast-message');
+    
+    msg.textContent = message;
+    toast.className = 'toast show ' + type;
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// Search functionality
+document.getElementById('search-input').addEventListener('input', renderProducts);
+</script>
+</body>
+</html>
